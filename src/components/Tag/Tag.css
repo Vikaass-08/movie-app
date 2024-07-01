@@ -1,0 +1,16 @@
+.tagButton {
+  width: fit-content;
+  height: 40px;
+  padding: 5px 10px 5px 10px;
+  margin: 5px;
+  border: none;
+  border-radius: 5px 5px;
+  background-color: #808080;
+  font-weight: 400;
+  color: #ffffff;
+}
+
+.active {
+  background-color: #e50914;
+  font-weight: 600;
+}
