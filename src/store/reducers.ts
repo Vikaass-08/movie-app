@@ -7,7 +7,14 @@ const setGenresInState = (state: State, genreList: GenreList): State => {
 };
 
 const setSelectedTag = (state: State, tagId: number): State => {
-  return {...state, seletedTagId: tagId};
+  let tagIds = state.seletedTagIds.filter(id => id != tagId);
+  if(state.seletedTagIds.includes(tagId)) {
+    return {...state, seletedTagIds: tagIds};
+  }
+  else {
+    tagIds.push(tagId);
+    return {...state, seletedTagIds: tagIds};
+  }
 };
 
 const addMoviesListPerYear = (state: State, moviesPerYear: MoviesListPerYear): State => {

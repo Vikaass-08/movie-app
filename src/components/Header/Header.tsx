@@ -39,7 +39,7 @@ function Header() {
             key={genre.id} 
             tagName={genre.name} 
             tagClickAction= {selectActiveTag}
-            currentActive= {genre.id == state.seletedTagId}
+            currentActive= {state.seletedTagIds.includes(genre.id)}
             tagId={genre.id}
           />
         )

@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import Card from "../Card/Card";
 import "./MovieListLayout.css";
 import { fetchMovies } from "../../apis/getMovies";
@@ -11,13 +11,17 @@ import { useGlobalContext } from "../../store/Store";
 
 function MovieListLayout() {
   const { state, dispatch } = useGlobalContext();
+  const [expandedCardId, setExpandedCardId] = useState<number>(-1);
 
   async function setMoviesPerYear() {
     try {
       const moviesListPerYear: MoviesListPerYear = {};
       let [startYear, endYear] = state.yearWindowRange;
       for (let startyear = startYear; startyear <= endYear; startyear++) {
-        let moviesList: MoviesList = await fetchMovies(startyear);
+        let moviesList: MoviesList = await fetchMovies(
+          startyear,
+          state.seletedTagIds
+        );
         moviesListPerYear[startyear] = moviesList;
       }
       dispatch({
@@ -46,24 +50,42 @@ function MovieListLayout() {
     }
   }
 
+  function areThereMoviesPresent() {
+    return Object.values(state.moviesPerYear).filter(moviesPerYear => moviesPerYear.length > 0).reduce((acc, val) => acc + val.length, 0) > 0;
+  }
+
   useEffect(() => {
     setMoviesPerYear();
   }, []);
 
+  useEffect(() => {
+    setMoviesPerYear();
+  }, [state.seletedTagIds]);
+
+  function movieLayout(year: string, moviesPerYear: MoviesList) {
+    return (
+      <section className="moviesPerYear" key={year}>
+        <h2 className="year">{year}</h2>
+        <div className="moviesCardView">
+          {moviesPerYear.map((movie) => (
+            <Card 
+              key={movie.id} 
+              data={movie} 
+              setExpandedCardId={setExpandedCardId}
+              expandedCardId={expandedCardId}
+            />
+          ))}
+        </div>
+      </section>
+    );
+  };
+
   return (
     <div className="movieListLayout">
-      {Object.entries(state.moviesPerYear).map(
-        ([year, moviesPerYear]) => (
-          <section className="moviesPerYear" key={year}>
-            <h3>{year}</h3>
-            <div className="moviesCardView">
-              {moviesPerYear.map((movie) => (
-                <Card key={movie.id} extendedView={false} data={movie} />
-              ))}
-            </div>
-          </section>
-        )
-      )}
+      {areThereMoviesPresent() ? 
+        Object.entries(state.moviesPerYear).map(([year, moviesPerYear]) => movieLayout(year, moviesPerYear)) :
+        <h2>No Data</h2>
+      }
     </div>
   );
 }

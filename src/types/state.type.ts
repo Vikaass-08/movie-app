@@ -3,7 +3,7 @@ import { GenreList, MoviesList, MoviesListPerYear, FetchMovieYear } from "./movi
 
 export interface State {
   genreList: GenreList;
-  seletedTagId: number;
+  seletedTagIds: Array<number>;
   moviesPerYear: MoviesListPerYear;
   yearWindowRange: [number, number]
 }

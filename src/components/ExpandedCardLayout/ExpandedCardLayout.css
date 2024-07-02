@@ -1,0 +1,41 @@
+.expandedCardLayout {
+  width: 100%;
+  height: 100vh;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 40;
+  background-color: #000000CC;
+}
+
+.cardLayout{
+  width: 300px;
+  height: 500px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color:  #808080;
+  padding-top: 20px;
+  border-radius: 5px 5px;
+  overflow: scroll;
+}
+
+.postureFigure {
+  text-align: center;
+  padding-bottom: 10px;
+}
+
+.poster {
+  width: 150px;
+  height: 200px;
+  background-size: cover;
+  text-align: center;
+}
+
+.movieContent {
+  position: relative;
+  top: 0;
+  left: 0;
+}

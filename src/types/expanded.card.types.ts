@@ -1,8 +1,7 @@
 import { Movies } from "./movies.type";
 
 
-export interface CardProps {
+export interface ExpandedCardProps {
   data: Movies;
-  expandedCardId: number;
   setExpandedCardId: React.Dispatch<React.SetStateAction<number>>;
 }

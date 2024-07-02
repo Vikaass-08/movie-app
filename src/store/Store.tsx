@@ -11,7 +11,7 @@ import { State, Action, ContextHook } from "../types/state.type";
 
 const initialState: State = {
   genreList: [],
-  seletedTagId: -1,
+  seletedTagIds: [],
   moviesPerYear: {},
   yearWindowRange: [2011, 2014]
 };

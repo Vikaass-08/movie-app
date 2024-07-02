@@ -3,7 +3,7 @@ import MovieListLayout from "./components/MovieListLayout/MovieListLayout";
 
 function App() {
   return (
-    <div className="container">
+    <div className="container" style={{backgroundColor: "#0f172a", color: "#FFFFFF"}}>
       <Header />
       <MovieListLayout/>
     </div>

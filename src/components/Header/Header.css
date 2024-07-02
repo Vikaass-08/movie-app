@@ -17,11 +17,12 @@
   position: sticky;
   top: 0;
   left: 0;
-  background-color: black;
+  background-color: #0F172AF2;
   color: white;
   width: 100%;
-  height: 100px;
+  height: 120px;
   z-index: 20;
-  padding: 0 10px;
+  padding: 10px 10px 10px 10px;
   text-align: center;
+  border-bottom: #808080 0.5px solid;
 }
