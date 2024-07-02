@@ -1,16 +1,10 @@
 import React from "react";
 import "./Tag.css";
-
-interface TagProps {
-  tagClickAction: (
-    event: React.MouseEvent<HTMLButtonElement, MouseEvent>
-  ) => void;
-  tagName: string;
-  currentActive: boolean;
-}
+import { TagProps } from "../../types/tags.type";
 
 const Tag: React.FC<TagProps> = ({
   tagName,
+  tagId,
   currentActive,
   tagClickAction,
 }) => {
@@ -19,7 +13,7 @@ const Tag: React.FC<TagProps> = ({
     <span className="tagContainer">
       <button
         className={currentActive == true ? "tagButton active" : "tagButton"}
-        onClick={tagClickAction}
+        onClick={() => tagClickAction(tagId)}
       >
         {tagName}
       </button>

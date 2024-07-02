@@ -1,0 +1,44 @@
+.movieListLayout {
+  display: grid;
+  place-items: center;
+  padding: 0 10px;
+  overflow: scroll;
+}
+
+.moviesCardView {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 20px;
+  flex-direction: row;
+}
+
+
+@media only screen and (max-width: 1535px) {
+  .moviesCardView {
+    grid-template-columns: repeat(5, 1fr);
+  }
+}
+
+@media only screen and (max-width: 1279px) {
+  .moviesCardView {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+@media only screen and (max-width: 1023px) {
+  .moviesCardView {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media only screen and (max-width: 767px) {
+  .moviesCardView {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media only screen and (max-width: 540px) {
+  .moviesCardView {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}

@@ -11,6 +11,9 @@ import { State, Action, ContextHook } from "../types/state.type";
 
 const initialState: State = {
   genreList: [],
+  seletedTagId: -1,
+  moviesPerYear: {},
+  yearWindowRange: [2011, 2014]
 };
 
 const globalContext = createContext<{
@@ -38,7 +41,7 @@ export const StoreProvider = ({ children }: { children: ReactNode }) => {
 };
 
 // Custom context hook
-export const useGlobalContext = () => {
+export const useGlobalContext: ContextHook = () => {
   const { state, dispatch } = useContext(globalContext);
   return { state, dispatch };
 };

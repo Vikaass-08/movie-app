@@ -1,13 +1,16 @@
 import axios from "axios";
 import { GenreList, MoviesList } from "../types/movies.type";
 
-export const fetchMovies = async (): Promise<MoviesList> => {
+export const fetchMovies = async (year: number): Promise<MoviesList> => {
   const API_URL_KEY: string | undefined = import.meta.env.VITE_API_KEY;
   if (!API_URL_KEY) console.log("API_URL_KEY not defined");
 
-  const url = `https://api.themoviedb.org/3/discover/movie?api_key=${API_URL_KEY}&sort_by=popularity.desc&primary_release_year=2023&page=1&vote_count.gte=100`;
+  const url = `https://api.themoviedb.org/3/discover/movie?api_key=${API_URL_KEY}&sort_by=popularity.desc&primary_release_year=${year}&page=1&vote_count.gte=100`;
   const response = await axios.get(url);
   const moviesList: MoviesList = response.data.results;
+  moviesList.forEach(movie => {
+    movie.poster_path = `https://image.tmdb.org/t/p/w500/${movie.poster_path}`;
+  })
   return moviesList;
 };
 

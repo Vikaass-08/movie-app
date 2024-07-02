@@ -1,0 +1,27 @@
+.tagList {
+  width: 100%;
+  overflow-x: scroll;
+  padding: 10px 0px;
+  white-space: nowrap;
+  /* IE and Edge */
+  -ms-overflow-style: none; 
+  /* Firefox */
+  scrollbar-width: none; 
+}
+
+.tagList::-webkit-scrollbar {
+  display: none;
+}
+
+.header {
+  position: sticky;
+  top: 0;
+  left: 0;
+  background-color: black;
+  color: white;
+  width: 100%;
+  height: 100px;
+  z-index: 20;
+  padding: 0 10px;
+  text-align: center;
+}

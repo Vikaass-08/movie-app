@@ -3,6 +3,7 @@ import { getGenres } from "../../apis/getMovies";
 import { useGlobalContext } from "../../store/Store";
 import { GenreList } from "../../types/movies.type";
 import Tag from "../Tag/Tag";
+import './Header.css'
 
 
 function Header() {
@@ -11,36 +12,41 @@ function Header() {
   async function setGenreInState() {
     try {
       let genreList: GenreList = await getGenres();
-      console.log("Genres LIST => ", genreList)
-      dispatch({type: "SET_GENRES", payload: genreList})
+      dispatch({type: "SET_GENRES", genreList: genreList})
       
     } catch (error) {
       console.log(error)
     }
   }
 
+  const selectActiveTag = (id: number) => {
+    dispatch({type: "SET_SELETED_TAG", selectedTagId: id});
+  }
+
   useEffect(() => {
     setGenreInState();
-    console.log(state.genreList)
   }, [])
   
 
 
   return (
-    <section className='header'>
-      <h1>MovieFlix</h1>
+    <header className='header'>
+      <h1>MOVIEFIX</h1>
 
-      {state.genreList.map(genre => (
-        <Tag 
-          key={genre.id} 
-          tagName={genre.name} 
-          tagClickAction={(e) => console.log(e)}
-          currentActive= {genre.id == 1}
-        />
-      )
-      )}
+      <section className="tagList">
+        {state.genreList.map(genre => (
+          <Tag 
+            key={genre.id} 
+            tagName={genre.name} 
+            tagClickAction= {selectActiveTag}
+            currentActive= {genre.id == state.seletedTagId}
+            tagId={genre.id}
+          />
+        )
+        )}
+      </section>
       
-    </section>
+    </header>
   )
 }
 
