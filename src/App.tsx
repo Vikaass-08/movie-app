@@ -1,11 +1,11 @@
 import Header from "./components/Header/Header";
-import MovieListLayout from "./components/MovieListLayout/MovieListLayout";
+import HomeLayout from "./components/HomeLayout/HomeLayout";
 
 function App() {
   return (
     <div className="container" style={{backgroundColor: "#0f172a", color: "#FFFFFF"}}>
       <Header />
-      <MovieListLayout/>
+      <HomeLayout/>
     </div>
   );
 }

@@ -8,13 +8,8 @@ import {
 
 import { reducer } from "./reducers";
 import { State, Action, ContextHook } from "../types/state.type";
+import { initialState } from "../utilities/helpers";
 
-const initialState: State = {
-  genreList: [],
-  seletedTagIds: [],
-  moviesPerYear: {},
-  yearWindowRange: [2011, 2014]
-};
 
 const globalContext = createContext<{
   state: State;

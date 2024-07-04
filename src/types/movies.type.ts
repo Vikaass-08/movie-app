@@ -9,13 +9,16 @@ export interface Movies {
 }
 export type MoviesList = Array<Movies>
 
-export type MoviesListPerYear = {
-  [year: string]: MoviesList
+export type CurrentPostion = "TOP" | "BOTTOM" | "BETWEEN";
+
+export type MoviesData = {
+  moviesList: MoviesList
+  page: number,
+  total_pages: number
 }
 
-export type FetchMovieYear = "NEXT_YEAR" | "PREVIOUS_YEAR";
 
-export type Genre = {id: number, name: string}
+export type Genre = { id: number, name: string }
 
 export type GenreList = Array<Genre>;
 

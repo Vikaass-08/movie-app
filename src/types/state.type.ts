@@ -1,18 +1,27 @@
-import { GenreList, MoviesList, MoviesListPerYear, FetchMovieYear } from "./movies.type";
+import { GenreList, MoviesData, MoviesList } from "./movies.type";
 
 
+export type AppState = 'SEARCH_MOVIES' | 'FILTERS_MOVIES' | 'YEAR_WISE_MOVIES';
 export interface State {
   genreList: GenreList;
-  seletedTagIds: Array<number>;
-  moviesPerYear: MoviesListPerYear;
-  yearWindowRange: [number, number]
+  seletedTagIds: Array<number>,
+  yearWiseMovies: {
+    yearWindowRange: number[],
+    moviesPerYear: {
+      [year: string]: MoviesList
+    }
+  }
+  searchedMovies: MoviesData,
+  moviesWithGenres: MoviesData,
+  currentState: AppState
 }
 
 export type Action =
  | { type: 'SET_GENRES', genreList: GenreList }
  | { type: 'SET_SELETED_TAG', selectedTagId: number }
- | { type: 'SET_MOVIES_PER_YEAR', moviesPerYear: MoviesListPerYear }
- | { type: 'UPDATE_MOVIES_LIST', fetchYear: FetchMovieYear, movies: MoviesList}
+ | { type: 'INIT_MOVIES_PER_YEAR', moviesListPerYear: {[year: string]: MoviesList}}
+ | { type: 'UPDATE_MOVIES_PER_YEAR',fetchMoviesFromYear: number,  moviesList: MoviesList}
+ | { type: 'RESET_MOVIES_DATA'}
 
 export type ReducerType = (state: State, action: Action) => State;
 

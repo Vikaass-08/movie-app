@@ -1,4 +1,4 @@
-import { GenreList, MoviesListPerYear, MoviesList, FetchMovieYear } from "../types/movies.type";
+import { GenreList, MoviesData, MoviesList } from "../types/movies.type";
 import { State, ReducerType } from "../types/state.type";
 
 
@@ -17,25 +17,46 @@ const setSelectedTag = (state: State, tagId: number): State => {
   }
 };
 
-const addMoviesListPerYear = (state: State, moviesPerYear: MoviesListPerYear): State => {
-  return {...state, moviesPerYear: moviesPerYear};
+const addMoviesListPerYear = (state: State, moviesList: {[year: string]: MoviesList}): State => {
+  return {...state, yearWiseMovies: {...state.yearWiseMovies, moviesPerYear: {...state.yearWiseMovies.moviesPerYear, ...moviesList}}}
 };
 
-const updateMoviesList = (state: State, fetchYear: FetchMovieYear, movies: MoviesList): State => {
-  let [start, end] = state.yearWindowRange;
-  let moviesPerYear = state.moviesPerYear;
-
-  if(fetchYear == "NEXT_YEAR") {
-    delete moviesPerYear[start];
-    moviesPerYear[end + 1] = movies;
-    return {...state, moviesPerYear: moviesPerYear, yearWindowRange: [start + 1, end + 1]};
+const updateMoviesList = (state: State, fetchMoviesFromYear: number,  moviesList: MoviesList): State => {
+  let yearWindowRange = state.yearWiseMovies.yearWindowRange;
+  if(fetchMoviesFromYear < yearWindowRange[0]) yearWindowRange = [fetchMoviesFromYear, ...yearWindowRange];
+  else yearWindowRange = [...yearWindowRange, fetchMoviesFromYear];
+  console.log(yearWindowRange);
+  let newState: State = {
+    ...state, 
+    yearWiseMovies: {
+      yearWindowRange: [...yearWindowRange],
+      moviesPerYear: {...state.yearWiseMovies.moviesPerYear, [fetchMoviesFromYear]: moviesList}
+    }
   }
-  else {
-    delete moviesPerYear[end];
-    moviesPerYear[start - 1] = movies;
-    return {...state, moviesPerYear: moviesPerYear, yearWindowRange: [start - 1, end - 1]};
-  }
+  console.log(newState);
+  return newState;
+};
 
+const resetMoviesData = (state: State): State => {
+  const newState: State = {
+    ...state,
+    seletedTagIds: [],
+    yearWiseMovies: {
+      yearWindowRange: [2011, 2012, 2013, 2014],
+      moviesPerYear: {}
+    },
+    searchedMovies: {
+      moviesList: [],
+      page: 1,
+      total_pages: 1
+    },
+    moviesWithGenres: {
+      moviesList: [],
+      page: 1,
+      total_pages: 1
+    },
+  }
+  return newState;
 };
 
 
@@ -45,10 +66,12 @@ export const reducer: ReducerType = (state, action) => {
         return setGenresInState(state, action.genreList);
       case 'SET_SELETED_TAG':
         return setSelectedTag(state, action.selectedTagId);
-      case 'SET_MOVIES_PER_YEAR':
-          return addMoviesListPerYear(state, action.moviesPerYear);
-      case 'UPDATE_MOVIES_LIST':
-        return updateMoviesList(state, action.fetchYear, action.movies);
+      case 'INIT_MOVIES_PER_YEAR':
+        return addMoviesListPerYear(state, action.moviesListPerYear);
+      case 'UPDATE_MOVIES_PER_YEAR':
+        return updateMoviesList(state, action.fetchMoviesFromYear, action.moviesList);
+      case 'RESET_MOVIES_DATA':
+        return resetMoviesData(state);
       default:
         return state;
   }

@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react'
 import { ExpandedCardProps } from '../../types/expanded.card.types'
 import { CastList, Cast } from '../../types/movies.type'
 import './ExpandedCardLayout.css'
-import { getCast } from '../../apis/getCast'
+import { getCast } from '../../apis/useGetCast'
 
 const ExpandedCardLayout: React.FC<ExpandedCardProps> = ({ data, setExpandedCardId }) => {
 
