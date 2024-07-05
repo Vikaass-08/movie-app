@@ -3,10 +3,10 @@ import { useEffect, useState } from "react";
 import { GenreList } from "../types/movies.type";
 import { useGlobalContext } from "../store/Store";
 
-export const useGetGenres = (): {loading: boolean} => {
+export const useGetGenres = (): { loading: boolean } => {
   const [loading, setLoading] = useState(true);
   const { dispatch } = useGlobalContext();
-  
+
   const API_URL_KEY: string | undefined = import.meta.env.VITE_API_KEY;
   if (!API_URL_KEY) console.log("API_URL_KEY not defined");
 
@@ -19,18 +19,18 @@ export const useGetGenres = (): {loading: boolean} => {
       cancelToken: new axios.CancelToken((c) => (cancel = c)),
     })
       .then((res) => {
-        let result: GenreList = res.data.genres
-        dispatch({type: "SET_GENRES", genreList: result})
+        let result: GenreList = res.data.genres;
+        dispatch({ type: "SET_GENRES", genreList: result });
         setLoading(false);
       })
       .catch((e) => {
         if (axios.isCancel(e)) {
-          console.log("Get Genres API Req Cancel")
+          console.log("Get Genres API Req Cancel");
           return;
         }
       });
     return () => cancel();
   }, []);
 
-  return {loading: loading}
+  return { loading: loading };
 };

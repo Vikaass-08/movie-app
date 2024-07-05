@@ -1,0 +1,49 @@
+.filteredMoviesList {
+  text-align: center;
+  display: grid;
+  place-items: center;
+  padding: 0px 10px 40px 10px;
+  overflow: scroll;
+  height: calc(100vh - 120px);
+}
+
+.filteredMovieCards {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 20px;
+  flex-direction: row;
+  padding-top: 10px;
+}
+
+
+
+
+@media only screen and (max-width: 1535px) {
+  .filteredMovieCards {
+    grid-template-columns: repeat(5, 1fr);
+  }
+}
+
+@media only screen and (max-width: 1279px) {
+  .filteredMovieCards {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+@media only screen and (max-width: 1023px) {
+  .filteredMovieCards {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media only screen and (max-width: 767px) {
+  .filteredMovieCards {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media only screen and (max-width: 540px) {
+  .filteredMovieCards {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}

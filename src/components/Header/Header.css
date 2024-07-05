@@ -26,3 +26,71 @@
   text-align: center;
   border-bottom: #808080 0.5px solid;
 }
+.brand {
+  height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.brandName {
+  font-size: 40px;
+}
+
+.inputBox {
+  width: 500px;
+  height: 40px;
+  background-color: white;
+  border-radius: 30px;
+  display: flex;
+  align-items: center;
+  padding: 20px;
+}
+
+.inputBox > input {
+  height: 40px;
+  border: none;
+  outline: none;
+  font-size: 18px;
+  padding-left: 10px;
+}
+
+
+@media only screen and (max-width: 900px) {
+  .inputBox {
+    width: 300px;
+    height: 30px;
+  }
+
+  .inputBox > input {
+    height: 20px;
+    border: none;
+    outline: none;
+    font-size: 10px;
+    /* padding-left: 10px; */
+  }
+
+  .brandName {
+    font-size: 20px;
+  }
+}
+
+
+@media only screen and (max-width: 660px) {
+  .inputBox {
+    width: 200px;
+    height: 30px;
+  }
+
+  .inputBox > input {
+    height: 20px;
+    border: none;
+    outline: none;
+    font-size: 10px;
+    /* padding-left: 10px; */
+  }
+
+  .brandName {
+    font-size: 20px;
+  }
+}

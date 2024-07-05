@@ -1,43 +1,47 @@
-import React, {useEffect, useState} from 'react'
-import { ExpandedCardProps } from '../../types/expanded.card.types'
-import { CastList, Cast } from '../../types/movies.type'
-import './ExpandedCardLayout.css'
-import { getCast } from '../../apis/useGetCast'
+import React, { useEffect, useState } from "react";
+import { ExpandedCardProps } from "../../types/expanded.card.types";
+import { CastList, Cast } from "../../types/movies.type";
+import "./ExpandedCardLayout.css";
+import { getCast } from "../../customHooks/useGetCast";
 
-const ExpandedCardLayout: React.FC<ExpandedCardProps> = ({ data, setExpandedCardId }) => {
-
+const ExpandedCardLayout: React.FC<ExpandedCardProps> = ({
+  data,
+  setExpandedCardId,
+}) => {
   const [director, setDirector] = useState<Cast | null>(null);
 
   async function fetchCast() {
     try {
       let allCast: CastList = await getCast(data.id);
-      let director: Cast = allCast.filter(cast => cast.job == 'Director')[0]
-      setDirector(director)
+      let director: Cast = allCast.filter((cast) => cast.job == "Director")[0];
+      setDirector(director);
     } catch (error) {
       console.log(error);
     }
   }
 
-  const closeExpandedCard = (event:  React.MouseEvent<HTMLElement>) => {
+  const closeExpandedCard = (event: React.MouseEvent<HTMLElement>) => {
     const target = event.target as HTMLElement;
-    if(target.className == 'expandedCardLayout') setExpandedCardId(-1);
-  }
+    if (target.className == "expandedCardLayout") setExpandedCardId(-1);
+  };
 
   useEffect(() => {
     fetchCast();
   }, []);
 
   return (
-    <article className='expandedCardLayout' onClick={closeExpandedCard}>
-      <div className='cardLayout'>
-        <figure className='postureFigure'>
-          <img className='poster' src={data.poster_path} alt='Movie Poster'/>
+    <article className="expandedCardLayout" onClick={closeExpandedCard}>
+      <div className="cardLayout">
+        <figure className="postureFigure">
+          <img className="poster" src={data.poster_path} alt="Movie Poster" />
         </figure>
-        <div className='movieContent'>
+        <div className="movieContent">
           <p>{"Movie Name: " + data.title}</p>
           <p>{"Movie Rating: " + data.vote_average}</p>
           <p>{"Movie Popularity: " + data.popularity}</p>
-          <p style={{paddingBottom: "10px"}}>{"Movie Director: " + director?.name}</p>
+          <p style={{ paddingBottom: "10px" }}>
+            {"Movie Director: " + director?.name}
+          </p>
           <p>{data.overview}</p>
           {/* {
             castList?.map(cast => (
@@ -47,7 +51,7 @@ const ExpandedCardLayout: React.FC<ExpandedCardProps> = ({ data, setExpandedCard
         </div>
       </div>
     </article>
-  )
-}
+  );
+};
 
-export default ExpandedCardLayout
+export default ExpandedCardLayout;

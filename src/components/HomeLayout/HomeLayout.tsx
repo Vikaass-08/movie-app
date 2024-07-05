@@ -1,22 +1,21 @@
-import { useGlobalContext } from "../../store/Store"
+import { useGlobalContext } from "../../store/Store";
 import FilteredTagMoviesLayout from "../FilteredTagMoviesLayout/FilteredTagMoviesLayout";
 import MoviesByYearLayout from "../MoviesByYearLayout/MoviesByYearLayout";
 import SearchedMoviesLayout from "../SearchedMoviesLayout/SearchedMoviesLayout";
-
 
 function HomeLayout() {
   const { state } = useGlobalContext();
 
   switch (state.currentState) {
     case "YEAR_WISE_MOVIES":
-      return <MoviesByYearLayout />
+      return <MoviesByYearLayout />;
     case "FILTERS_MOVIES":
-      return <SearchedMoviesLayout />
+      return <FilteredTagMoviesLayout />;
     case "SEARCH_MOVIES":
-      return <SearchedMoviesLayout />
+      return <SearchedMoviesLayout />;
     default:
-      return <FilteredTagMoviesLayout />
+      return <MoviesByYearLayout />;
   }
 }
 
-export default HomeLayout
+export default HomeLayout;
