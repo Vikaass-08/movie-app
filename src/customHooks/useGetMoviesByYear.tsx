@@ -1,12 +1,10 @@
 import axios, { CancelTokenSource } from "axios";
 import { useEffect, useState } from "react";
-import {MoviesList } from "../types/movies.type";
+import {MoviesList, LoadMovies } from "../types/movies.type";
 import { useGlobalContext } from "../store/Store";
 
 export const usefetchMoviesByYear = (
-  prevYear: number,
-  nextYear: number,
-  currYear: number
+  loadData: [boolean, LoadMovies],
 ): {
   loading: boolean;
   hasMorePrev: boolean;
@@ -15,17 +13,28 @@ export const usefetchMoviesByYear = (
   const [loading, setLoading] = useState<boolean>(true);
   const [hasMorePrev, setHasMorePrev] = useState<boolean>(false);
   const [hasMoreNext, setHasMoreNext] = useState<boolean>(false);
-  const { dispatch } = useGlobalContext();
+  const { state, dispatch } = useGlobalContext();
 
   const API_URL_KEY: string | undefined = import.meta.env.VITE_API_KEY;
   if (!API_URL_KEY) console.log("API_URL_KEY not defined");
 
   const fetchData = async (source: CancelTokenSource): Promise<void> => {
     try {
+      const fetchedYears: number[] = Object.keys(state.yearWiseMovies).map(num => parseInt(num, 10)).sort((a, b) => a - b);
+      let year: number;
+      if(loadData[1] == "PREVIOUS_YEAR") {
+        year = fetchedYears[0] - 1;
+      }
+      else if(loadData[1] == 'NEXT_YEAR') {
+        year = fetchedYears[fetchedYears.length - 1] + 1;
+      }
+      else {
+        year = 2012;
+      }
     const res = await axios.get("https://api.themoviedb.org/3/discover/movie", {
       params: {
         api_key: API_URL_KEY,
-        primary_release_year: currYear,
+        primary_release_year: year,
         sort_by: "popularity.desc",
         "vote_count.gte": 100,
         Page: 1,
@@ -38,13 +47,13 @@ export const usefetchMoviesByYear = (
       movie.poster_path = `https://image.tmdb.org/t/p/w500/${movie.poster_path}`;
     });
     moviesList.sort((a, b) => b.popularity - a.popularity);
-    console.log(currYear, " -> ", moviesList);
+    console.log(year, " -> ", moviesList);
     dispatch({
-      type: "INIT_MOVIES_PER_YEAR",
-      moviesListPerYear: { [currYear]: moviesList },
+      type: "MOVIES_PER_YEAR",
+      moviesListPerYear: { [year]: moviesList },
     });
-    setHasMoreNext(nextYear != new Date().getFullYear());
-    setHasMorePrev(prevYear != 1888);
+    setHasMoreNext(year != new Date().getFullYear());
+    setHasMorePrev(year != 1888);
     setLoading(false);
   }
   catch(err) {
@@ -65,7 +74,7 @@ export const usefetchMoviesByYear = (
     return () => {
       if (source) source.cancel();
     };
-  }, [currYear]);
+  }, [loadData]);
 
   return {
     loading,

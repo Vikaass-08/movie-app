@@ -2,40 +2,52 @@ import { useEffect, useState, useRef, useCallback } from "react";
 import Card from "../Card/Card";
 import "./MoviesByYearLayout.css";
 import { usefetchMoviesByYear } from "../../customHooks/useGetMoviesByYear";
-import { MoviesList } from "../../types/movies.type";
+import { MoviesList, LoadMovies } from "../../types/movies.type";
 import { useGlobalContext } from "../../store/Store";
+import Loader from "../Loader/Loader";
 
 function MoviesByYearLayout() {
   const { state, dispatch } = useGlobalContext();
   const [expandedCardId, setExpandedCardId] = useState<number>(-1);
-  const [prevYear, changePrevYear] = useState<number>(2012);
-  const [nextYear, changeNextYear] = useState<number>(2012);
-  const [currYear, changeCurrentYear] = useState<number>(2012);
-  const [firstLoad, setFirstLoad] = useState<boolean>(true);
-  const defaultScrolledViewRef = useRef<HTMLDivElement | null>(null);
-  const { loading, hasMoreNext, hasMorePrev } = usefetchMoviesByYear(
-    prevYear,
-    nextYear,
-    currYear
-  );
+  const [loadData, chageLoadData] = useState<[boolean, LoadMovies]>([false, "INITIAL_YEAR"]);
+  const { loading, hasMoreNext, hasMorePrev } = usefetchMoviesByYear(loadData);
 
   const observerTop = useRef<IntersectionObserver | null>(null);
   const observerBottom = useRef<IntersectionObserver | null>(null);
+  const defaultScrolledViewRef = useRef<IntersectionObserver | null>(null);
+
+  const freshLoadedRef = useCallback(
+    (node: HTMLDivElement | null) => {
+      if (loading) return;
+      if (defaultScrolledViewRef && defaultScrolledViewRef.current) defaultScrolledViewRef.current.disconnect();
+
+      defaultScrolledViewRef.current = new IntersectionObserver((entries) => {
+        if (entries[0].isIntersecting && hasMoreNext) {
+          console.log("ENTER HERE FRESH LOAD");
+        }
+      });
+      if (node) {
+        if(loadData[1] == "PREVIOUS_YEAR") node.scrollIntoView({ behavior: "instant", block: "start" });
+        defaultScrolledViewRef.current.observe(node);
+      }
+    },
+    [loading, hasMoreNext, hasMorePrev]
+  );
 
   const lastMovieElementRef = useCallback(
     (node: HTMLDivElement | null) => {
       if (loading) return;
-      if (observerBottom && observerBottom.current)
-        observerBottom.current.disconnect();
+      if (observerBottom && observerBottom.current) observerBottom.current.disconnect();
+
       observerBottom.current = new IntersectionObserver((entries) => {
-        if (entries[0].isIntersecting && hasMoreNext && !firstLoad) {
-          changeNextYear((prev) => prev + 1);
-          changeCurrentYear(nextYear + 1);
+        if (entries[0].isIntersecting && hasMoreNext) {
+          console.log("ENTER HERE NEXT LOAD");
+          chageLoadData(prev => [!prev[0], "NEXT_YEAR"]);
         }
       });
       if (node) observerBottom.current.observe(node);
     },
-    [loading, hasMoreNext, firstLoad]
+    [loading, hasMoreNext]
   );
 
   const firstMovieElementRef = useCallback(
@@ -43,93 +55,70 @@ function MoviesByYearLayout() {
       if (loading) return;
       if (observerTop && observerTop.current) observerTop.current.disconnect();
       observerTop.current = new IntersectionObserver((entries) => {
-        if (entries[0].isIntersecting && hasMorePrev && !firstLoad) {
-          changePrevYear((prev) => prev - 1);
-          changeCurrentYear(prevYear - 1);
+        if (entries[0].isIntersecting && hasMorePrev) {
+          console.log("ENTER HERE PREVIOUS LOAD");
+          chageLoadData(prev => [!prev[0], "PREVIOUS_YEAR"])
         }
       });
-      if (node) observerTop.current.observe(node);
+      if (node)  observerTop.current.observe(node);
     },
-    [loading, hasMorePrev, firstLoad]
+    [loading, hasMorePrev]
   );
-
-  function areThereMoviesPresent() {
-    let movieListByYearObject = Object.values(
-      state.yearWiseMovies.moviesPerYear
-    );
-    return (
-      movieListByYearObject
-        .map((moviesListEachYear) => moviesListEachYear.length)
-        .reduce((acc, num) => (acc += num), 0) > 0
-    );
-  }
 
   useEffect(() => {
     dispatch({ type: "RESET_MOVIES_DATA" });
   }, []);
 
-  useEffect(() => {
-    const activeViewElement = defaultScrolledViewRef.current;
-    if (activeViewElement) {
-      if (prevYear >= 2011)
-        activeViewElement.scrollIntoView({ behavior: "auto" });
-      setFirstLoad(false);
-    }
-  }, [state.yearWiseMovies.moviesPerYear]);
+  function getRefType(year: number, idx: number, length: number) {
+    if(year == years[0] && idx == 0) return firstMovieElementRef;
+    else if(year == years[years.length - 1] && idx == length - 1) return lastMovieElementRef;
+    else return null;
+  }
 
-  function movieLayout(year: string, moviesList: MoviesList) {
+  function movieLayout(year: number, moviesList: MoviesList) {
     return (
       <section
         className="moviesPerYear"
-        ref={year == "2012" ? defaultScrolledViewRef : null}
+        ref={years.length > 1 && year == years[1] ? freshLoadedRef : null}
       >
         <h2 className="year">{year}</h2>
         <div className="moviesCardView">
-          {moviesList.map((movie) => (
-            <Card
-              key={movie.id}
-              data={movie}
-              setExpandedCardId={setExpandedCardId}
-              expandedCardId={expandedCardId}
-            />
+          {moviesList.map((movie, idx) => (
+            <div ref={getRefType(year, idx, moviesList.length)} key={movie.id}>
+              <Card
+                key={movie.id}
+                data={movie}
+                setExpandedCardId={setExpandedCardId}
+                expandedCardId={expandedCardId}
+              />
+            </div>
           ))}
         </div>
       </section>
     );
   }
 
+  const years = Object.keys(state.yearWiseMovies).map(num => parseInt(num, 10)).sort((a, b) => a - b);
+
   return (
     <div className="movieListLayout">
-      {loading && (<h1>Loading More....</h1>)}
-      {areThereMoviesPresent() ? (
-        Object.entries(state.yearWiseMovies.moviesPerYear).map(
-          ([year, moviesList]) => {
-            if (moviesList.length == 0) {
-              return <div key={year}></div>;
-            } else if (prevYear == +year && nextYear != +year) {
-              return (
-                <div key={year} ref={firstMovieElementRef}>
-                  {movieLayout(year, state.yearWiseMovies.moviesPerYear[year])}
-                </div>
-              );
-            } else if (nextYear == +year) {
-              return (
-                <div key={year} ref={lastMovieElementRef}>
-                  {movieLayout(year, state.yearWiseMovies.moviesPerYear[year])}
-                </div>
-              );
-            } else {
-              return (
-                <div key={year}>
-                  {movieLayout(year, state.yearWiseMovies.moviesPerYear[year])}
-                </div>
-              );
-            }
+      {loading && loadData[1] != "NEXT_YEAR" && <Loader />}
+      {years.length > 0 && 
+        years.map((year) => {
+          if (state.yearWiseMovies[year].length == 0) {
+            return <div key={year}></div>;
           }
-        )
-      ) : (
-        <h2>No Data</h2>
-      )}
+          else {
+            return (
+              <div key={year}>
+                {movieLayout(year, state.yearWiseMovies[year])}
+              </div>
+            )
+          } 
+        })
+      }
+      {!loading && years.length == 0 && <h1>NO DATA FOUND</h1>}
+      {loading && loadData[1] == "NEXT_YEAR" && <Loader />}
     </div>
   );
 }

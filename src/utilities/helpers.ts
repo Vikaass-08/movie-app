@@ -4,10 +4,7 @@ export const initialState: State = {
   genreList: [],
   seletedTagIds: [],
   searchString: "",
-  yearWiseMovies: {
-    yearWindowRange: [2011, 2012, 2013, 2014],
-    moviesPerYear: {},
-  },
+  yearWiseMovies: {},
   searchedMovies: [],
   moviesWithGenresTag: [],
   currentState: "YEAR_WISE_MOVIES",

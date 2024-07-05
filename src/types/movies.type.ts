@@ -9,7 +9,7 @@ export interface Movies {
 }
 export type MoviesList = Movies[];
 
-export type CurrentPostion = "TOP" | "BOTTOM" | "BETWEEN";
+export type LoadMovies = "INITIAL_YEAR" | "PREVIOUS_YEAR" | "NEXT_YEAR";
 
 export type MoviesData = {
   moviesList: MoviesList;

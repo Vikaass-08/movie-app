@@ -1,17 +1,15 @@
 import { useEffect, useState, useRef, useCallback } from "react";
 import Card from "../Card/Card";
 import { useGlobalContext } from "../../store/Store";
-import './SearchedMoviesLayout.css'
+import "./SearchedMoviesLayout.css";
 import { useSearchMovies } from "../../customHooks/useSearchMovies";
+import Loader from "../Loader/Loader";
 
 function SearchedMoviesLayout() {
   const { state, dispatch } = useGlobalContext();
   const [page, setPage] = useState<number>(1);
   const [expandedCardId, setExpandedCardId] = useState<number>(-1);
-  const { loading, hasMoreMovies } = useSearchMovies(
-    state.searchString,
-    page
-  );
+  const { loading, hasMoreMovies } = useSearchMovies(state.searchString, page);
 
   const observerBottom = useRef<IntersectionObserver | null>(null);
 
@@ -33,7 +31,6 @@ function SearchedMoviesLayout() {
   useEffect(() => {
     dispatch({ type: "RESET_MOVIES_DATA" });
   }, []);
-
 
   return (
     <div className="searchedMoviesList">
@@ -61,9 +58,9 @@ function SearchedMoviesLayout() {
         <></>
       )}
       {!loading && state.searchedMovies.length == 0 && <h2>No Data</h2>}
-      {loading && <h1>Loading more....</h1>}
+      {loading && <Loader />}
     </div>
   );
 }
 
-export default SearchedMoviesLayout
+export default SearchedMoviesLayout;

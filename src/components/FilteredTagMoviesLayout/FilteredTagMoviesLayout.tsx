@@ -3,6 +3,7 @@ import Card from "../Card/Card";
 import { useGlobalContext } from "../../store/Store";
 import { useFilteredMoviesByTag } from "../../customHooks/useFilteredMovies";
 import "./FilteredTagMoviesLayout.css";
+import Loader from "../Loader/Loader";
 
 function FilteredTagMoviesLayout() {
   const { state, dispatch } = useGlobalContext();
@@ -58,7 +59,7 @@ function FilteredTagMoviesLayout() {
         </section>
       )}
       {!loading && state.moviesWithGenresTag.length == 0 && <h2>No Data</h2>}
-      {loading && <h1>Loading more....</h1>}
+      {loading && <Loader />}
     </div>
   );
 }

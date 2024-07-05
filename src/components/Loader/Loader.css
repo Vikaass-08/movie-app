@@ -1,0 +1,11 @@
+.loader {
+  width: 100%;
+  height: 40px;
+  text-align: center;
+  padding: 10px 0;
+  padding-top: 15px;
+}
+
+.loaderGif {
+  height: 20px;
+}
