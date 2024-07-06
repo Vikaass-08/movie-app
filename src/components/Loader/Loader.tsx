@@ -1,12 +1,13 @@
-import loadingGif from '../../assets/images/loader.gif'
-import './Loader.css'
+import "./Loader.css";
 
 function Loader() {
   return (
-    <div className='loader'>
-      <img className='loaderGif' src={loadingGif} alt="loading..." />
+    <div className="loader">
+      <div className="containLoader">
+        <div className="loaderAnim"></div>
+      </div>
     </div>
-  )
+  );
 }
 
-export default Loader
+export default Loader;

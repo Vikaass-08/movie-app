@@ -1,34 +1,49 @@
 import { useEffect, useRef } from "react";
-import { useGetGenres } from "../../customHooks/useGetGenre";
+import { useGetGenres } from "../../apis/useGetGenre";
 import { useGlobalContext } from "../../store/Store";
 import Tag from "../Tag/Tag";
 import "./Header.css";
+import { BRAND_NAME } from "../../utilities/constant";
 
 function Header() {
   const { state, dispatch } = useGlobalContext();
   const { loading } = useGetGenres();
-  const inputBoxRef = useRef<HTMLInputElement | null> (null);
+  const inputBoxRef = useRef<HTMLInputElement | null>(null);
 
   const selectActiveTag = (id: number) => {
     dispatch({ type: "SET_SELETED_TAG", selectedTagId: id });
   };
 
   useEffect(() => {
-    if(inputBoxRef.current && state.seletedTagIds.length > 0) inputBoxRef.current.value = "";
-  }, [state.seletedTagIds])
+    if (inputBoxRef.current && state.seletedTagIds.length > 0)
+      inputBoxRef.current.value = "";
+  }, [state.seletedTagIds]);
 
   function handleSearch(e: React.ChangeEvent<HTMLInputElement>) {
-    dispatch({type: "UPDATE_SEARCH_STRING", searchString: e.target.value})
+    dispatch({ type: "UPDATE_SEARCH_STRING", searchString: e.target.value });
   }
 
   return (
     <header className="header">
-      <div style={{display: "flex", flexDirection: "row", justifyContent: "space-around"}}>
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "row",
+          justifyContent: "space-around",
+        }}
+      >
         <div className="brand">
-         <p className="brandName">MOVIEFIX</p>
+          <p className="brandName">{BRAND_NAME}</p>
         </div>
         <div className="inputBox">
-          <input ref={inputBoxRef} type="text" name="searchText" id="searchText" placeholder="Search Movies" onChange={handleSearch} />
+          <input
+            ref={inputBoxRef}
+            type="text"
+            name="searchText"
+            id="searchText"
+            placeholder="Search Movies"
+            onChange={handleSearch}
+          />
         </div>
       </div>
 

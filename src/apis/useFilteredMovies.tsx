@@ -2,11 +2,15 @@ import axios, { CancelTokenSource } from "axios";
 import { useEffect, useState } from "react";
 import { MoviesList } from "../types/movies.type";
 import { useGlobalContext } from "../store/Store";
+import { MoviePosterPath } from "../utilities/constant";
 
 export const useFilteredMoviesByTag = (
   tagIds: number[],
   page: number
-): { loading: boolean; hasMoreMovies: boolean } => {
+): { 
+  loading: boolean; 
+  hasMoreMovies: boolean 
+} => {
   const [loading, setLoading] = useState<boolean>(true);
   const [hasMoreMovies, setHasMoreMovies] = useState<boolean>(false);
   const { dispatch } = useGlobalContext();
@@ -34,7 +38,9 @@ export const useFilteredMoviesByTag = (
 
       const moviesList: MoviesList = res.data.results;
       moviesList.forEach((movie) => {
-        movie.poster_path = `https://image.tmdb.org/t/p/w500/${movie.poster_path}`;
+        movie.poster_path = movie.poster_path
+          ? MoviePosterPath(movie.poster_path)
+          : "";
       });
       moviesList.sort((a, b) => b.popularity - a.popularity);
 

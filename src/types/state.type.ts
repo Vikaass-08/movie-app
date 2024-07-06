@@ -17,10 +17,13 @@ export type Action =
   | { type: "RESET_MOVIES_DATA" }
   | { type: "SET_GENRES"; genreList: GenreList }
   | { type: "SET_SELETED_TAG"; selectedTagId: number }
-  | { type: "MOVIES_PER_YEAR"; moviesListPerYear: { [year: string]: MoviesList }}
-  | { type: "INIT_MOVIES_WITH_GENRES", moviesList: MoviesList }
-  | { type: "INIT_MOVIES_WITH_SEARCH", moviesList: MoviesList }
-  | { type: "UPDATE_SEARCH_STRING", searchString: string }
+  | {
+      type: "MOVIES_PER_YEAR";
+      moviesListPerYear: { [year: string]: MoviesList };
+    }
+  | { type: "INIT_MOVIES_WITH_GENRES"; moviesList: MoviesList }
+  | { type: "INIT_MOVIES_WITH_SEARCH"; moviesList: MoviesList }
+  | { type: "UPDATE_SEARCH_STRING"; searchString: string };
 
 export type ReducerType = (state: State, action: Action) => State;
 

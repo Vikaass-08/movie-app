@@ -8,8 +8,7 @@ import {
 
 import { reducer } from "./reducers";
 import { State, Action, ContextHook } from "../types/state.type";
-import { initialState } from "../utilities/helpers";
-
+import { initialState } from "../utilities/constant";
 
 const globalContext = createContext<{
   state: State;
@@ -18,7 +17,6 @@ const globalContext = createContext<{
   state: initialState,
   dispatch: () => {},
 });
-
 
 export const StoreProvider = ({ children }: { children: ReactNode }) => {
   const [state, dispatch] = useReducer(reducer, initialState);

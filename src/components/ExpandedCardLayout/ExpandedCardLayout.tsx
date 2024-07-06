@@ -1,24 +1,20 @@
 import React, { useEffect, useState } from "react";
 import { ExpandedCardProps } from "../../types/expanded.card.types";
-import { CastList, Cast } from "../../types/movies.type";
+import { Cast } from "../../types/movies.type";
 import "./ExpandedCardLayout.css";
-import { getCast } from "../../customHooks/useGetCast";
+import { useGetCast } from "../../apis/useGetCast";
+import defaultMovieImg from "../../assets/images/defaultMovieImg.jpg";
+import Loader from "../Loader/Loader";
+import { useGlobalContext } from "../../store/Store";
 
 const ExpandedCardLayout: React.FC<ExpandedCardProps> = ({
   data,
   setExpandedCardId,
 }) => {
   const [director, setDirector] = useState<Cast | null>(null);
-
-  async function fetchCast() {
-    try {
-      let allCast: CastList = await getCast(data.id);
-      let director: Cast = allCast.filter((cast) => cast.job == "Director")[0];
-      setDirector(director);
-    } catch (error) {
-      console.log(error);
-    }
-  }
+  const { loading, castList } = useGetCast(data.id);
+  const { state } = useGlobalContext();
+  const [genreName, setGenreName] = useState<string>("");
 
   const closeExpandedCard = (event: React.MouseEvent<HTMLElement>) => {
     const target = event.target as HTMLElement;
@@ -26,29 +22,56 @@ const ExpandedCardLayout: React.FC<ExpandedCardProps> = ({
   };
 
   useEffect(() => {
-    fetchCast();
-  }, []);
+    let director: Cast = castList.filter((cast) => cast.job == "Director")[0];
+    setDirector(director);
+    const genreNames: string = state.genreList
+      .filter((genre) => data.genre_ids.includes(genre.id))
+      .map((genre) => genre.name)
+      .join(", ");
+    setGenreName(genreNames);
+  }, [loading]);
 
   return (
     <article className="expandedCardLayout" onClick={closeExpandedCard}>
       <div className="cardLayout">
-        <figure className="postureFigure">
-          <img className="poster" src={data.poster_path} alt="Movie Poster" />
-        </figure>
-        <div className="movieContent">
-          <p>{"Movie Name: " + data.title}</p>
-          <p>{"Movie Rating: " + data.vote_average}</p>
-          <p>{"Movie Popularity: " + data.popularity}</p>
-          <p style={{ paddingBottom: "10px" }}>
-            {"Movie Director: " + director?.name}
-          </p>
-          <p>{data.overview}</p>
-          {/* {
-            castList?.map(cast => (
-              <p key={cast.id}>{cast.name} + {cast.department}</p>
-            ))
-          } */}
-        </div>
+        {loading ? (
+          <Loader />
+        ) : (
+          <>
+            <figure className="postureFigure">
+              <img
+                className="poster"
+                src={data.poster_path || defaultMovieImg}
+                alt="Movie Poster"
+              />
+            </figure>
+            <div className="movieContent">
+              <p>
+                <span className="movieInfo">Movie Name: </span> {data.title}
+              </p>
+              <p>
+                <span className="movieInfo">Movie Genres: </span>
+                {genreName}
+              </p>
+              <p>
+                <span className="movieInfo">Movie Rating: </span>
+                {data.vote_average}
+              </p>
+              <p>
+                <span className="movieInfo">Movie Popularity: </span>
+                {data.popularity}
+              </p>
+              <p>
+                <span className="movieInfo">Movie Director: </span>
+                {director?.name}
+              </p>
+              <p>
+                <span className="movieInfo">Movie Discription: </span>
+                {data.overview}
+              </p>
+            </div>
+          </>
+        )}
       </div>
     </article>
   );

@@ -3,3 +3,15 @@
   margin: 0;
   padding: 0;
 }
+
+:root {
+  --background-color: #0F172A;
+  --white: #FFFFFF;
+  --shadow-color-one: #0000003D;
+  --shadow-color-two: #0000005C;
+  --card-text-background: #D509144D;
+  --black-filter: #000000CC;
+  --highlight-text: #00FFFF;
+  --greyish: #808080;
+  --higlight-color: #E50914;
+}

@@ -2,7 +2,7 @@ import { useEffect, useState, useRef, useCallback } from "react";
 import Card from "../Card/Card";
 import { useGlobalContext } from "../../store/Store";
 import "./SearchedMoviesLayout.css";
-import { useSearchMovies } from "../../customHooks/useSearchMovies";
+import { useSearchMovies } from "../../apis/useSearchMovies";
 import Loader from "../Loader/Loader";
 
 function SearchedMoviesLayout() {

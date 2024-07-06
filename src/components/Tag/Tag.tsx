@@ -8,7 +8,6 @@ const Tag: React.FC<TagProps> = ({
   currentActive,
   tagClickAction,
 }) => {
-  
   return (
     <span className="tagContainer">
       <button

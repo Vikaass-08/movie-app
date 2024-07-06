@@ -1,6 +1,5 @@
 import { Movies } from "./movies.type";
 
-
 export interface CardProps {
   data: Movies;
   expandedCardId: number;

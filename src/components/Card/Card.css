@@ -2,9 +2,16 @@
   width: 200px;
   height: 300px;
   overflow: hidden;
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  box-shadow: 0 4px 8px 0 var(--shadow-color-one),
+    0 6px 20px 0 var(--shadow-color-two);
   display: flex;
   flex-direction: column;
+  transition: transform 0.5s;
+  border-radius: 10px;
+}
+
+.normalCardLayout:hover {
+  transform: scale(1.1);
 }
 
 .normalCardImage {
@@ -20,14 +27,22 @@
 }
 
 .normalCardDetails {
-  background-color: rgb(0, 0, 0);
+  background-color: var(--card-text-background);
   z-index: 2;
-  color: white;
+  color: var(--white);
+  font-weight: 800;
+  text-transform: capitalize;
+  text-align: center;
+  padding: 10px 0;
 }
 
 @media only screen and (max-width: 660px) {
   .normalCardLayout {
     width: 150px;
     height: 250px;
+  }
+  .normalCardDetails {
+    font-weight: 200;
+    font-size: 15px;
   }
 }

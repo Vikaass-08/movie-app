@@ -28,7 +28,9 @@ export const useSearchMovies = (searchKey: string, page: number) => {
       const moviesList: MoviesList = res.data.results;
 
       moviesList.forEach((movie) => {
-        movie.poster_path = `https://image.tmdb.org/t/p/w500/${movie.poster_path}`;
+        movie.poster_path = movie.poster_path
+          ? `https://image.tmdb.org/t/p/w500/${movie.poster_path}`
+          : "";
       });
       moviesList.sort((a, b) => b.popularity - a.popularity);
 

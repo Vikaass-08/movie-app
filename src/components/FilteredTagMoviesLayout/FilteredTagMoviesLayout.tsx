@@ -1,7 +1,7 @@
 import { useEffect, useState, useRef, useCallback } from "react";
 import Card from "../Card/Card";
 import { useGlobalContext } from "../../store/Store";
-import { useFilteredMoviesByTag } from "../../customHooks/useFilteredMovies";
+import { useFilteredMoviesByTag } from "../../apis/useFilteredMovies";
 import "./FilteredTagMoviesLayout.css";
 import Loader from "../Loader/Loader";
 
@@ -49,7 +49,6 @@ function FilteredTagMoviesLayout() {
               key={movie.id}
             >
               <Card
-                key={movie.id}
                 data={movie}
                 setExpandedCardId={setExpandedCardId}
                 expandedCardId={expandedCardId}

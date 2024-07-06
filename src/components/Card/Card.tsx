@@ -1,6 +1,7 @@
 import "./Card.css";
 import { CardProps } from "../../types/card.type";
 import ExpandedCardLayout from "../ExpandedCardLayout/ExpandedCardLayout";
+import defaultMovieImg from '../../assets/images/defaultMovieImg.jpg'
 
 const Card: React.FC<CardProps> = ({ data, expandedCardId, setExpandedCardId }) => {
 
@@ -11,7 +12,7 @@ const Card: React.FC<CardProps> = ({ data, expandedCardId, setExpandedCardId }) 
       ) : (
         <article className="normalCardLayout" onClick={() => setExpandedCardId(data.id)}>
           <div className="normalCardImage">
-            <img src={data.poster_path} alt="Movie Poster" />
+            <img src={data.poster_path || defaultMovieImg} alt="Movie Poster" />
           </div>
           <div className="normalCardDetails">
             <p>{data.title}</p>

@@ -1,7 +1,6 @@
 import { GenreList, MoviesList } from "../types/movies.type";
 import { State, ReducerType } from "../types/state.type";
 
-
 export const reducer: ReducerType = (state, action) => {
   switch (action.type) {
     case "RESET_MOVIES_DATA":
@@ -60,12 +59,11 @@ const setInitMoviesPerYear = (
     ...state,
     yearWiseMovies: {
       ...state.yearWiseMovies,
-      ...moviesList
+      ...moviesList,
     },
     currentState: "YEAR_WISE_MOVIES",
   };
 };
-
 
 const addMoviesListWithGenreTag = (
   state: State,
@@ -73,10 +71,7 @@ const addMoviesListWithGenreTag = (
 ): State => {
   return {
     ...state,
-    moviesWithGenresTag: [
-      ...state.moviesWithGenresTag,
-      ...moviesList
-    ],
+    moviesWithGenresTag: [...state.moviesWithGenresTag, ...moviesList],
     currentState: "FILTERS_MOVIES",
   };
 };
@@ -87,32 +82,28 @@ const addMoviesListWithSearchKey = (
 ): State => {
   return {
     ...state,
-    searchedMovies: [
-      ...state.searchedMovies,
-      ...moviesList
-    ],
-    currentState: "SEARCH_MOVIES"
+    searchedMovies: [...state.searchedMovies, ...moviesList],
+    currentState: "SEARCH_MOVIES",
   };
 };
 
-const changeSearchString = (
-  state: State,
-  searchString: string
-): State => {
+const changeSearchString = (state: State, searchString: string): State => {
   return {
     ...state,
     searchedMovies: [],
     seletedTagIds: [],
     yearWiseMovies: {},
     searchString: searchString,
-    currentState: searchString.trim().length == 0 ? "YEAR_WISE_MOVIES" : "SEARCH_MOVIES"
+    currentState:
+      searchString.trim().length == 0 ? "YEAR_WISE_MOVIES" : "SEARCH_MOVIES",
   };
 };
 
 const resetMoviesData = (state: State): State => {
   const newState: State = {
     ...state,
-    seletedTagIds: state.currentState != 'FILTERS_MOVIES' ? []: state.seletedTagIds,
+    seletedTagIds:
+      state.currentState != "FILTERS_MOVIES" ? [] : state.seletedTagIds,
     yearWiseMovies: {},
     searchedMovies: [],
     moviesWithGenresTag: [],
